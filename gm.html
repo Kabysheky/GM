@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machan OS v2.0</title>
+    <style>
+        :root {
+            --accent: #00ff88;
+            --bg: #080808;
+            --surface: #121212;
+            --text: #ffffff;
+        }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .app-container {
+            width: 90%;
+            max-width: 440px;
+            background: var(--surface);
+            padding: 2.5rem;
+            border-radius: 2px; /* Brutalist sharp edges */
+            border-left: 4px solid var(--accent);
+            box-shadow: 20px 20px 0px #000;
+        }
+        .label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #666;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+        #content {
+            font-size: 1.25rem;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+        .highlight {
+            color: var(--accent);
+            font-weight: 700;
+        }
+        .btn {
+            margin-top: 2.5rem;
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 12px 20px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.2s;
+        }
+        .btn:hover {
+            background: var(--accent);
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <span class="label">Daily Transmission // Secured</span>
+        <div id="content">Loading protocol...</div>
+        <button class="btn" onclick="runProtocol()">Re-Generate Chaos</button>
+    </div>
+
+    <script>
+const nonsense = [
+    "if we put a turbo on a lawnmower, does it become a 'sleeper' or just a very fast way to die?",
+    "I'm convinced my car's 'Check Engine' light is actually just a mood light for the dashboard.",
+    "why do we call it a 'glove box' when it’s actually a 'random receipts and a spare fuse' box?",
+    "if I ever get a Rolex, I'm still checking the time on my phone out of habit.",
+    "do you think Seiko designers ever look at a dial and think 'needs more indices'?",
+    "I’ve spent 15 minutes wondering if my watch is slow or if the universe is just speeding up.",
+    "is a 1.0L engine just a very loud sewing machine? Asking for a friend.",
+    "imagine if cats had to work 9-5 jobs. The traffic would be paw-ful.",
+    "why is 'thirst' a word but 'hunger' isn't 'foody-ness'?",
+    "if I buy a 2026 Lexus, am I a responsible adult or just a machan with better credit?",
+    "I’m 80% sure my ceiling fan is judging my sleep schedule.",
+    "is it a 'project car' if it hasn't moved since 2024?",
+    "if we were in an RPG, your special ability would be 'unlimited yap'.",
+    "do you think clouds ever look down at us and say 'that one looks like a loser'?",
+    "I just realized that 'typing' is just finger-drumming with a purpose.",
+    "why do we cook bacon and bake cookies? The English language is a scam, machan.",
+    "I'm currently wondering if a Casio F-91W would survive a nuclear blast or just a medium-sized puddle.",
+    "if I drink enough coffee, do I unlock the secret 25th hour of the day?",
+    "I saw a guy driving a Vitz with a wing so big I thought he was trying to reach orbit.",
+    "is it still 'procrastination' if I'm thinking about the work while doing nothing?",
+    "do you think fish see water, or is it invisible to them like air is to us?",
+    "I've decided that my spirit animal is a sloth that has been given one (1) espresso.",
+    "if we lived in the 1800s, we'd probably be arguing about which horse has more torque.",
+    "why does the 'close door' button in elevators never actually work?",
+    "I'm convinced that the 'S' in SUV stands for 'Suddenly Unaffordable Vehicle'.",
+    "do you think spiders get annoyed when we walk through their webs? Like 'bro, that took 4 hours'.",
+    "if a car has 4-wheel drive, can it drive up the side of a building? Testing this later.",
+    "I’m currently staring at my watch waiting for the date to change. This is my Friday night.",
+    "why is it called 'fast food' if the line takes 45 minutes?",
+    "I think my phone is addicted to my face. It gets so clingy every morning.",
+    "if I ever lose my mind, please don't help me find it. I’m better off without it.",
+    "do you think ghosts ever get embarrassed when they trip over things they can't see?",
+    "I’ve realized that 'lol' now just means 'I have nothing else to say'.",
+    "why are there no 'B' batteries? We have A, AA, AAA, C, and D. Where is the B, machan?",
+    "if I sleep with my eyes open, am I technically still awake?",
+    "I'm convinced that the 'cool side' of the pillow is a portal to another dimension.",
+    "is a croissant just a fancy, buttery boomerang?",
+    "why do we call them 'apartments' if they are all stuck together?",
+    "if I stand in the middle of a library and scream, am I still 'quiet' in the eyes of the law?",
+    "do you think birds ever look at airplanes and think 'cheaters'?",
+    "I just spent 10 minutes trying to remember the word for 'manual' while looking at a stick shift.",
+    "is it possible to be 'overwhelmed' and 'underwhelmed', or can you just be 'whelmed'?",
+    "I'm starting to think my fridge is a time machine that only works for milk.",
+    "why do we press harder on the remote buttons when the batteries are dead?",
+    "if I eat a clock, is it time-consuming?",
+    "I'm convinced that 'Check Engine' lights are just the car's way of asking for attention.",
+    "is a 'sleeper' build just a car that looks like it's been through a mid-life crisis?",
+    "do you think trees ever look at paper and scream?",
+    "I’ve realized that my bed is a horizontal charging station for my soul.",
+    "why do we say 'fell asleep'? It’s not like we tripped into it.",
+    "if I buy a watch with a moonphase, do I have to become a werewolf?",
+    "I'm 99% sure that mirrors are just windows into a parallel universe where I'm left-handed.",
+    "is it still a 'commute' if I'm just walking from the bed to the laptop?",
+    "do you think mosquitoes have a favorite flavor of blood? I think I'm 'Extra Spicy'.",
+    "why is the 'alphabetical order' the way it is? Who decided 'A' goes first?",
+    "if I put a spoiler on my desk, will my coding become 10% faster?",
+    "I’m convinced that 'Terms and Conditions' are just the world's longest works of fiction.",
+    "is a 'U-turn' just a 'No-turn' that changed its mind?",
+    "why do we call it a 'cold' when your head feels like it's on fire?",
+    "if I walk backwards, am I technically gaining time?",
+    "I've decided that my new hobby is 'aggressive napping'.",
+    "do you think aliens ever look at us and say 'look at these weirdos with their watches'?",
+    "why do we call them 'dentists' and not 'tooth-wizards'?",
+    "if I eat a burger and a salad at the same time, do they cancel each other out?",
+    "I'm convinced that the internet is just a series of tubes filled with cat videos.",
+    "is a 'shortcut' just a way to see parts of the city you never wanted to see?",
+    "do you think clouds ever get lonely? They're always moving, never staying.",
+    "why do we say 'heads or tails' when coins don't have tails?",
+    "if I ever get a tattoo, it's going to be a 'Low Battery' icon on my forehead.",
+    "I'm currently wondering if my shadow is plotting to run away.",
+    "is it still 'fashion' if I'm wearing the same shirt for the third day in a row?",
+    "do you think stars ever look down and wish on us?",
+    "why is 'pineapple' not called 'pine-apple' in every language? It’s a tragedy.",
+    "if I become a ghost, I'm definitely going to spend my time haunting people's Wi-Fi routers.",
+    "I've realized that 'adulting' is just pretending to know what you're doing.",
+    "why do we call them 'smartphones' when they make us do such dumb things?",
+    "if I put a 'VTEC' sticker on my laptop, will it stop lagging?",
+    "I'm convinced that the 'Skip Ad' button is the greatest invention of the 21st century.",
+    "is a 'hot dog' a sandwich? This is the hill I’m going to die on today.",
+    "do you think dogs think we're gods because we can open doors?",
+    "why do we call it 'common sense' when it's so rare?",
+    "if I ever win an Oscar, I'm thanking my watch for always being late.",
+    "I'm currently at a level of tired that even caffeine is like 'nah, I'm out'.",
+    "is a 'daydream' just a dream that forgot to set an alarm?",
+    "do you think pencils ever get tired of being sharp?",
+    "why do we call it 'liquid gold' when it’s just olive oil?",
+    "if I sleep on my stomach, am I technically 'planking'?",
+    "I'm convinced that the 'close tab' button is the most satisfying thing on the internet.",
+    "is a 'circle' just a square that gave up?",
+    "do you think robots ever get 'the chills'?",
+    "why do we call it a 'remote control' when it's always lost?",
+    "if I ever become a billionaire, I'm buying everyone in Colombo a Vitz with a turbo.",
+    "I'm currently wondering if I can charge my phone with my sheer willpower. It’s not working.",
+    "is a 'moment' just a second that's trying too hard?",
+    "do you think birds ever look at us and think 'why are they always looking at those glowing rectangles'?",
+    "why do we call it 'soft drink' when it’s filled with aggressive bubbles?",
+    "if I ever write a book, it's just going to be 300 pages of 'machan' repeated.",
+    "I'm convinced that my brain is just a browser with 47 tabs open, and 3 of them are playing music I can't find.",
+    "is a 'mystery' just a fact that's playing hard to get?",
+    "why do we call it 'pavement' when we walk on it? We should call it 'walkment'."
+];
+
+const holidays = [
+    "National 'Transfer Me 1000 LKR' Day",
+    "International Festival of 'I Forgot My Wallet'",
+    "The 2nd Annual 'Should I Sell My Car?' Summit",
+    "World 'Why Is Petrol So Expensive' Wednesday",
+    "National Jubilee of 'One More Drink, Machan'",
+    "The Global Day of Unanswered WhatsApp Messages",
+    "International 'My Car Is Making A Weird Noise' Day",
+    "The Feast of the Over-Polished Seiko",
+    "National 'Don't Tell My Dad About This' Day",
+    "World 'Let's Buy A Project Car' Saturday",
+    "The Anniversary of your 47th Failed Diet",
+    "International 'I'm 5 Minutes Away' (Actually Still At Home) Day",
+    "The Grand Gala of 'Is This Watch Too Big For My Wrist?'",
+    "National 'Wait, What Day Is It?' Jubilee",
+    "World 'I'll Do It Tomorrow' Tuesday",
+    "The International Day of Bad Haircuts",
+    "The 10th Annual 'I Could Have Been A Pro Driver' Celebration",
+    "National 'Looking Productive At Work' Day",
+    "Global Festival of 'Why Did I Buy This?' Purchases",
+    "The Official Day of Pointless Google Searches",
+    "International 'Send This To 10 People' Spam Day",
+    "The National 'I Need A New Watch' Emergency",
+    "World 'Let's Start A YouTube Channel' Day (Never Happens)",
+    "The Feast of the 3:00 AM Coffee",
+    "International 'Why Are You Like This?' Day",
+    "National 'I'm Not Angry, Just Disappointed' Day",
+    "World 'Can I Borrow Your Charger?' Week",
+    "The Global Celebration of 'It Worked Yesterday'",
+    "International 'Check The Oil' Morning",
+    "The 1st Annual 'We Should Open A Cafe' Discussion",
+    "National 'I Promise I'll Pay You Back' Day",
+    "World 'Does This Look Like A Real Rolex?' Hour",
+    "The Global Festival of 'I'm Only Sleeping For 5 More Minutes'",
+    "International 'I'm Not A Mechanic, But...' Day",
+    "The National 'Why Is The Internet So Slow' Jubilee",
+    "World 'Is This T-Shirt Clean Enough?' Day",
+    "The Official Day of Regretting Yesterday's Decisions",
+    "International 'Can You Hear Me Now?' Zoom Call Festival",
+    "National 'I'm Going To Bed Early' (Stays Up Until 3 AM) Day",
+    "The Global 'Happy Whatever' Celebration"
+];
+
+        function runProtocol() {
+            const randomNonsense = nonsense[Math.floor(Math.random() * nonsense.length)];
+            const randomHoliday = holidays[Math.floor(Math.random() * holidays.length)];
+
+            // The Correct Order:
+            // 1. The Direct Greeting
+            // 2. The Holiday Spam (Revenge)
+            // 3. The Random Custom Holiday
+            // 4. The Philosophical Nonsense
+            
+            const output = `
+                Good morning machan, <br><br>
+                Happy Birthday! Merry Christmas! Happy New Year! Happy Life, Happy Wife! But no Happy Husband<br><br>
+                Also, wishing you a very soulful <span class="highlight">${randomHoliday}</span>. <br><br>
+                Anyway, ${randomNonsense} <br><br>
+                Stay sexy, best friend. Always live in the moment!
+            `;
+
+            document.getElementById('content').innerHTML = output;
+        }
+
+        window.onload = runProtocol;
+    </script>
+</body>
+</html>
